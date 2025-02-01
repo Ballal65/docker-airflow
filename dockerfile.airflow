@@ -1,0 +1,29 @@
+FROM apache/airflow:2.7.1-python3.11
+
+# Switch to root user to install system dependencies
+USER root
+
+# Install system-level dependencies
+RUN apt-get update && \
+    apt-get install -y gcc python3-dev openjdk-11-jdk procps && \
+    apt-get clean
+
+# Ensure the airflow group and user exist
+RUN groupadd -g 1000 airflow || true && \
+    useradd -u 1000 -g airflow airflow || true
+
+# Create the /opt/airflow/data directory and set permissions
+RUN mkdir -p /opt/airflow/data && \
+    chown -R airflow:airflow /opt/airflow/data && \
+    chmod -R 775 /opt/airflow/data
+
+# Set JAVA_HOME environment variable for Spark
+ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+ENV PATH="$JAVA_HOME/bin:$PATH"
+
+# Switch back to the airflow user
+USER airflow
+
+# Install required Python packages with specific versions
+COPY requirements.txt /requirements.txt
+RUN pip install --no-cache-dir -r /requirements.txt
