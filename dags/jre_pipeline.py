@@ -156,7 +156,7 @@ def extract_jre_data():
     current_minute = now.minute
 
     # Only allow execution between 11:00 PM and 11:05 PM
-    if (current_hour == 23 and 0 <= current_minute <= 5):
+    if not (current_hour == 23 and 0 <= current_minute <= 5):
         print(f" \n \n \n Skipping execution: Current time is outside the 11:00 PM - 11:05 PM window. Current Time: {current_hour}:{current_minute} \n \n \n")
         # Skip execution if outside the allowed window
         raise AirflowSkipException("\n \n \n Current time is outside the allowed execution window.Skipping the entire chain. \n \n \n")
