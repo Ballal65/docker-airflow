@@ -32,7 +32,7 @@ services:
     entrypoint: ["bash", "-c"]
     command: >
       airflow db init &&
-      airflow users create --username admin --firstname Admin --lastname User --role Admin --email admin@example.com --password admin
+      airflow users create --username ${AIRFLOW_ADMIN_USERNAME} --firstname ${AIRFLOW_ADMIN_FIRSTNAME} --lastname ${AIRFLOW_ADMIN_LASTNAME} --role Admin --email ${AIRFLOW_ADMIN_EMAIL} --password ${AIRFLOW_ADMIN_PASSWORD}
     networks:
       - containers_network
     user: "${AIRFLOW_UID}:${AIRFLOW_GID}"
@@ -55,7 +55,7 @@ services:
     command: >
       bash -c "
       airflow db init &&
-      airflow users create --username airflow --firstname Ballal --lastname Pathare --role Admin --email ballalpathare65@gmail.com --password airflow &&
+      airflow users create --username ${AIRFLOW_USER_USERNAME} --firstname ${AIRFLOW_ADMIN_FIRSTNAME} --lastname ${AIRFLOW_ADMIN_LASTNAME} --role Admin --email {AIRFLOW_ADMIN_EMAIL} --password ${AIRFLOW_USER_PASSWORD} &&
       airflow scheduler"
     container_name: airflow-scheduler
     image: airflow-scheduler

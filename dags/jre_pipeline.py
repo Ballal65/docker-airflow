@@ -197,7 +197,8 @@ def clean_and_upload_to_postgres_staging_sink():
         required_columns["extraction_date"] = extraction_date
 
         # PostgreSQL connection details
-        db_url = os.getenv("postgres_db_url")
+        db_url = "postgresql+psycopg2://postgres:Parijat789@postgres:5432/postgres"
+        #db_url = os.getenv("postgres_db_url")
 
         # Create an SQLAlchemy engine
         engine = create_engine(db_url)
@@ -294,7 +295,8 @@ def get_latest_yesterday(engine, db_url, today):
 
 
 def staging_to_insights_transformation():
-    db_url = os.getenv("postgres_db_url")
+    db_url = "postgresql+psycopg2://postgres:Parijat789@postgres:5432/postgres"
+    #db_url = os.getenv("postgres_db_url")
     engine = create_engine(db_url)
 
     now = datetime.now(local_tz)
@@ -410,7 +412,7 @@ default_args = {
 
 #Simple dag running every night at 11 pm. 
 dag = DAG(
-    'JRE_pipeline',
+    'JRE_Postgres_Pipeline',
     default_args=default_args,
     description='Fetch and save Joe Rogan Experience YouTube channel data daily at 11 PM',
     schedule_interval='0 23 * * *',  # Run daily at 11:00 PM
