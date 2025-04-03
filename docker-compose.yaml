@@ -10,22 +10,18 @@ x-airflow-common: &airflow-common
     - ./logs:/opt/airflow/logs
     - /home/ompathare/extracted_data:/opt/airflow/extracted_data
     - /home/ompathare/transformed_data:/opt/airflow/transformed_data
-
   command: >
     bash -c "
     mkdir -p /opt/airflow/data &&
     chmod -R 775 /opt/airflow/data &&
-    exec $0 $@"
-  user: "${AIRFLOW_UID:-1000}:${AIRFLOW_GID:-0}"
+    exec \$0 \$@"
+  user: "${AIRFLOW_UID:-50000}:${AIRFLOW_GID:-0}"
   networks:
     - containers_network
 
 services:
-#Airflow init
   airflow-init:
-    build:
-      context: .
-      dockerfile: dockerfile.airflow
+    <<: *airflow-common
     container_name: airflow-init
     image: airflow-init
     env_file: .env
@@ -37,7 +33,6 @@ services:
       - containers_network
     user: "${AIRFLOW_UID}:${AIRFLOW_GID}"
 
-# Airflow Webserver
   webserver:
     <<: *airflow-common
     command: bash -c "sleep 20 && airflow webserver"
@@ -45,23 +40,23 @@ services:
     image: airflow-webserver
     restart: on-failure
     ports:
-      - "8080:8080"
+      - "8082:8080"
     depends_on:
       - scheduler
 
-#Airflow scheduler
   scheduler:
     <<: *airflow-common
     command: >
       bash -c "
       airflow db init &&
-      airflow users create --username ${AIRFLOW_USER_USERNAME} --firstname ${AIRFLOW_ADMIN_FIRSTNAME} --lastname ${AIRFLOW_ADMIN_LASTNAME} --role Admin --email {AIRFLOW_ADMIN_EMAIL} --password ${AIRFLOW_USER_PASSWORD} &&
+      airflow users create --username ${AIRFLOW_USER_USERNAME} --firstname ${AIRFLOW_ADMIN_FIRSTNAME} --lastname ${AIRFLOW_ADMIN_LASTNAME} --role Admin --email ${AIRFLOW_ADMIN_EMAIL} --password ${AIRFLOW_USER_PASSWORD} &&
       airflow scheduler"
     container_name: airflow-scheduler
     image: airflow-scheduler
     restart: on-failure
     networks:
       - containers_network
+
 networks:
   containers_network:
     external: true

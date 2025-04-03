@@ -1,0 +1,24 @@
+sudo chmod -R 777 plugins
+sudo chmod -R 777 logs
+sudo chmod -R 777 dags
+
+sudo chown -R ompathare:ompathare plugins
+sudo chown -R ompathare:ompathare logs
+sudo chown -R ompathare:ompathare dags
+
+
+Do not change the following:
+AIRFLOW_UID=50000
+AIRFLOW_GID=0
+
+ompathare@ubuntu-s-4vcpu-8gb-amd-blr1-01:~/docker-airflow$ ls -l
+total 36
+-rw-rw-r-- 1 ompathare ompathare  192 Mar 31 11:54 Makefile
+drwxrwxr-x 2 ompathare ompathare 4096 Mar 31 11:15 archived_dags
+drwxrwxrwx 2 ompathare ompathare 4096 Mar 31 11:03 dags
+-rw-rw-r-- 1 ompathare ompathare 1838 Mar 31 11:58 docker-compose.yaml
+-rw-rw-r-- 1 ompathare ompathare  723 Mar 31 11:58 dockerfile.airflow
+drwxrwxrwx 4 ompathare ompathare 4096 Mar 31 12:08 logs
+-rw-rw-r-- 1 ompathare ompathare  255 Mar 31 12:15 permissions.txt
+drwxrwxrwx 2 ompathare ompathare 4096 Mar 31 11:00 plugins
+-rw-rw-r-- 1 ompathare ompathare  175 Mar 31 11:58 requirements.txt
